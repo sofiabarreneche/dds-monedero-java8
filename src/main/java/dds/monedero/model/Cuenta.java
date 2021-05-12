@@ -59,17 +59,20 @@ public class Cuenta {
       throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
     }
   }
+
   public void esMayorIgualA3(double cuanto){
     if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
       throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
     }
   }
+
   public void cumpleVerificaciones(double cuanto){
     if (getSaldo() - cuanto < 0) {
       throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
     }
 
   }
+
   public void cumpleLimite(double cuanto){
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
     double limite = 1000 - montoExtraidoHoy;
@@ -86,7 +89,7 @@ public class Cuenta {
         .mapToDouble(Movimiento::getMonto)
         .sum();
   }
-//Feature Envy en getMovimientos
+
   public List<Movimiento> getMovimientos() {
     return movimientos;
   }
