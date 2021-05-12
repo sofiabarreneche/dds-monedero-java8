@@ -24,26 +24,16 @@ public class Movimiento {
   }
 
   public boolean fueDepositado(LocalDate fecha) {
-    return isDeposito() && esDeLaFecha(fecha);
+    return esDeposito && esDeLaFecha(fecha);
   }
 
   public boolean fueExtraido(LocalDate fecha) {
-    return isExtraccion() && esDeLaFecha(fecha);
+    return !esDeposito && esDeLaFecha(fecha);
   }
 
   public boolean esDeLaFecha(LocalDate fecha) {
     return this.fecha.equals(fecha);
   }
-//isDeposito esta demas
-  public boolean isDeposito() {
-    return esDeposito;
-  }
-
-  //este metodo es un duplicated code ya que no esta haciendo nada. Se podria ahorrar esta linea de codigo utilizando el metodo de arriba pero negado
-  public boolean isExtraccion() {
-    return !esDeposito;
-  }
-
 
   // calcularValor y agregateA estan en la clase Movimiento, cuando realmente deberian estar en la clase Cuenta. Este smell Misplaced methods.
   public void agregateA(Cuenta cuenta) {
