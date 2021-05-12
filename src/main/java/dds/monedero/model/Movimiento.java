@@ -34,7 +34,7 @@ public class Movimiento {
   public boolean esDeLaFecha(LocalDate fecha) {
     return this.fecha.equals(fecha);
   }
-
+//isDeposito esta demas
   public boolean isDeposito() {
     return esDeposito;
   }
