@@ -22,30 +22,22 @@ public class Movimiento {
   public LocalDate getFecha() {
     return fecha;
   }
-
+// fue Depositado y fueExtraido no son usados nunca.
   public boolean fueDepositado(LocalDate fecha) {
-    return esDeposito && esDeLaFecha(fecha);
+    return isDeposito() && esDeLaFecha(fecha);
   }
 
   public boolean fueExtraido(LocalDate fecha) {
-    return !esDeposito && esDeLaFecha(fecha);
+    return !isDeposito() && esDeLaFecha(fecha);
   }
+
+  public boolean isDeposito(){ return esDeposito;}
 
   public boolean esDeLaFecha(LocalDate fecha) {
     return this.fecha.equals(fecha);
   }
 
-  // calcularValor y agregateA estan en la clase Movimiento, cuando realmente deberian estar en la clase Cuenta. Este smell Misplaced methods.
-  public void agregateA(Cuenta cuenta) {
-    cuenta.setSaldo(calcularValor(cuenta));
-    cuenta.agregarMovimiento(fecha, monto, esDeposito);
-  }
 
-  public double calcularValor(Cuenta cuenta) {
-    if (esDeposito) {
-      return cuenta.getSaldo() + getMonto();
-    } else {
-      return cuenta.getSaldo() - getMonto();
-    }
-  }
+
+
 }

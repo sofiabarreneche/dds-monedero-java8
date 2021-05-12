@@ -55,10 +55,21 @@ public class Cuenta {
     new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
   }
 
-  public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {
-    Movimiento movimiento = new Movimiento(fecha, cuanto, esDeposito);
-    movimientos.add(movimiento);
+  public void agregarMovimiento( Movimiento mov) {
+    movimientos.add(mov);
+    calcularValor(mov);
   }
+  public double calcularValor(Movimiento mov) {
+    if (mov.isDeposito()) {
+      return saldo += mov.getMonto();
+    } else {
+      return saldo -= mov.getMonto();
+    }
+  }
+
+
+
+
 // en GetMontoExtraido tambien es un Long Method
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
