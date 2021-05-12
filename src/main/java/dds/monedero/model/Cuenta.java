@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cuenta {
-// esta declarado 0 el saldo dos veces, innecesariamente
+
   private double saldo;
   private List<Movimiento> movimientos = new ArrayList<>();
 
@@ -80,10 +80,9 @@ public class Cuenta {
     }
   }
 
-// en GetMontoExtraido tambien es un Long Method
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
-        .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
+        .filter(movimiento -> !movimiento.fueExtraido(fecha))
         .mapToDouble(Movimiento::getMonto)
         .sum();
   }
