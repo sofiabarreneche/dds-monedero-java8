@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cuenta {
-
+// esta declarado 0 el saldo dos veces, innecesariamente
   private double saldo = 0;
   private List<Movimiento> movimientos = new ArrayList<>();
 
@@ -25,7 +25,8 @@ public class Cuenta {
   public void setMovimientos(List<Movimiento> movimientos) {
     this.movimientos = movimientos;
   }
-
+// en sacar y poner se repite una parte del codigo. Este smell se llama Duplicated code.
+// Tambien es un Long Method, ya que se puede delegar.
   public void poner(double cuanto) {
     if (cuanto <= 0) {
       throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
@@ -58,14 +59,14 @@ public class Cuenta {
     Movimiento movimiento = new Movimiento(fecha, cuanto, esDeposito);
     movimientos.add(movimiento);
   }
-
+// en GetMontoExtraido tambien es un Long Method
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
         .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
         .mapToDouble(Movimiento::getMonto)
         .sum();
   }
-
+//Feature Envy en getMovimientos
   public List<Movimiento> getMovimientos() {
     return movimientos;
   }

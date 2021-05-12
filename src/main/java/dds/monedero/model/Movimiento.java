@@ -39,10 +39,13 @@ public class Movimiento {
     return esDeposito;
   }
 
+  //este metodo es un duplicated code ya que no esta haciendo nada. Se podria ahorrar esta linea de codigo utilizando el metodo de arriba pero negado
   public boolean isExtraccion() {
     return !esDeposito;
   }
 
+
+  // calcularValor y agregateA estan en la clase Movimiento, cuando realmente deberian estar en la clase Cuenta. Este smell Misplaced methods.
   public void agregateA(Cuenta cuenta) {
     cuenta.setSaldo(calcularValor(cuenta));
     cuenta.agregarMovimiento(fecha, monto, esDeposito);
