@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Cuenta {
 // esta declarado 0 el saldo dos veces, innecesariamente
-  private double saldo = 0;
+  private double saldo;
   private List<Movimiento> movimientos = new ArrayList<>();
 
   public Cuenta() {
