@@ -25,40 +25,27 @@ public class Cuenta {
   public void setMovimientos(List<Movimiento> movimientos) {
     this.movimientos = movimientos;
   }
-// en sacar y poner se repite una parte del codigo. Este smell se llama Duplicated code.
-// Tambien es un Long Method, ya que se puede delegar.
+
   public void poner(double cuanto) {
-    if (cuanto <= 0) {
-      throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
-    }
-
-    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
-      throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
-    }
-
-    new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
+    esNegativo(cuanto);
+    esMayorIgualA3(cuanto);
+    Movimiento nuevo = new Movimiento(LocalDate.now(), cuanto, true);
+    agregarMovimiento(nuevo);
   }
 
   public void sacar(double cuanto) {
-    if (cuanto <= 0) {
-      throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
-    }
-    if (getSaldo() - cuanto < 0) {
-      throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
-    }
-    double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
-    double limite = 1000 - montoExtraidoHoy;
-    if (cuanto > limite) {
-      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
-          + " diarios, límite: " + limite);
-    }
-    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
+   esNegativo(cuanto);
+   cumpleVerificaciones(cuanto);
+   cumpleLimite(cuanto);
+   Movimiento nuevo = new Movimiento(LocalDate.now(), cuanto, false);
+   agregarMovimiento(nuevo);
   }
 
   public void agregarMovimiento( Movimiento mov) {
     movimientos.add(mov);
     calcularValor(mov);
   }
+
   public double calcularValor(Movimiento mov) {
     if (mov.isDeposito()) {
       return saldo += mov.getMonto();
@@ -67,8 +54,31 @@ public class Cuenta {
     }
   }
 
+  public void esNegativo(double cuanto){
+    if (cuanto <= 0) {
+      throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
+    }
+  }
+  public void esMayorIgualA3(double cuanto){
+    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
+      throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
+    }
+  }
+  public void cumpleVerificaciones(double cuanto){
+    if (getSaldo() - cuanto < 0) {
+      throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
+    }
 
+  }
+  public void cumpleLimite(double cuanto){
+    double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
+    double limite = 1000 - montoExtraidoHoy;
 
+    if (cuanto > limite) {
+      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
+          + " diarios, límite: " + limite);
+    }
+  }
 
 // en GetMontoExtraido tambien es un Long Method
   public double getMontoExtraidoA(LocalDate fecha) {
